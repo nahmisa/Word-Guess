@@ -1,3 +1,7 @@
+class GuessingGame
+
+end
+
 class WordGuess
 
   def letter_guess

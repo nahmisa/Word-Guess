@@ -22,8 +22,9 @@ class WordBank
   def get_word
     @answer = @words.sample
     @words.delete(@answer)
-    length_of_word = @answer.length
-    puts " * " * length_of_word
+
+    @answer_array = @answer.split(//)
+
     #we will need to make this word into an array so that we can replace stars with correct letter guesses
 
   end

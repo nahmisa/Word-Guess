@@ -1,14 +1,26 @@
 class GuessingGame
 
+#print guessed_letters when not nil to show user what they have guessed
+#compare guessed_letters to answer array to print stars
+#compare WordGuess.letter_guess to WordBank.answer_array to see if correct or incorrect
+
 end
 
 class WordGuess
 
+  def initialize
+    @guessed_letters = []
+  end
+
   def letter_guess
     print "What letter would you like to guess? > "
     guess = gets.chomp.downcase
-    puts guess
+    @guessed_letters << guess
+    @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
+
   end
+
+
 
 end
 

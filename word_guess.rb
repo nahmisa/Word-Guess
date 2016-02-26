@@ -78,11 +78,16 @@ class GuessPrompter
     @possible_letters = ('a'..'z').to_a
     print "\nWhat letter would you like to guess? > "
     while @guess = gets.chomp.downcase
-      if !(@possible_letters.include? @guess) || !(@guess.length == 1)
+      if !(@possible_letters.include? @guess) || !(@guess.length == 1) # first we need to get a letter
         print "Sorry, that is not a valid guess. Please enter a letter.  > "
       else
-        return @guess
-        break
+        if @guessed_letters.include? @guess #guessed letters IS part of the array already
+          print "You've already guessed that letter!  Please enter a new letter. > "
+        else
+          @guessed_letters << @guess #push the guess into the array for future comparisons
+          return @guess
+          break
+        end
       end
     end
   end

@@ -12,6 +12,10 @@ class GuessingGame
 #print guessed_letters when not nil to show user what they have guessed
 #compare guessed_letters to answer array to print stars
 #compare LetterGuess. guess_letter to WordBank.answer_array to see if correct or incorrect
+  def method_name
+
+  end
+
   def print_answer_blanks
     @answer_validation_array.each do |letter|
       if @guessed_letters_validation_array.include? letter

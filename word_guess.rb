@@ -1,5 +1,5 @@
 class GuessingGame
-  attr_accessor :wordbank_answer, :answer_validation_array, :user_guess
+  attr_accessor :wordbank_answer, :answer_validation_array, :user_guess, :last_guessed_letter
   def initialize
     @number_of_guesses = 10
     @wordbank_answer = WordBank.new
@@ -23,10 +23,16 @@ class GuessingGame
 
   end
 
-  def update_remaining_guesses
+  def update_remaining_guesses #need to test - writing test below
     if !(@answer_validation_array.include? @last_guessed_letter) #if the guess is not in the answer array, the user losses a guess.
       @number_of_guesses -= 1
+      puts "Oh no!  There was no #{ @last_guessed_letter } in the word."
+      puts "The dinosaur is now #{ @number_of_guesses } feet away from you!!!!"
+    else
+      puts "Yipee!!! #{ @last_guessed_letter } was in the word."
+      puts "The dinosaur is still #{ @number_of_guesses } feet away."
     end
+
   end
 
 end

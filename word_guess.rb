@@ -1,30 +1,45 @@
-class GuessingGame
-  attr_accessor :wordbank_answer, :answer_validation_array, :user_guess, :last_guessed_letter
+class GamePlay
+  attr_accessor :answer_word, :answer_validation_array, :user_guess, :last_guessed_letter, :guessed_letters
   def initialize
     @number_of_guesses = 10
-    @wordbank_answer = WordBank.new
-    @answer_validation_array = @wordbank_answer.get_word
-    @user_guess = LetterGuess.new
-    @guessed_letters_validation_array = @user_guess.guessed_letters
+    @answer_word = WordFetcher.new
+    @answer_validation_array = @answer_word.get_word
+    @user_guess = GuessPrompter.new
+    @guessed_letters = []
   end
 
 #print guessed_letters when not nil to show user what they have guessed
 #compare guessed_letters to answer array to print stars
-#compare LetterGuess. guess_letter to WordBank.answer_array to see if correct or incorrect
-  def ask_user_for_guess
-    @last_guessed_letter = @user_guess.guess_letter
+#compare GuessPrompter. user_prompt to WordFetcher.answer_array to see if correct or incorrect
+
+  def play_game
+    print_answer_blanks
+    ask_user_for_guess
+    add_letter_to_guess_array
+    update_remaining_guesses
+
 
   end
 
   def print_answer_blanks
     @answer_validation_array.each do |letter|
-      if @guessed_letters_validation_array.include? letter
+      if @guessed_letters.include? letter
         print " #{letter} "
       else
         print " * "
       end
     end
 
+  end
+
+  def ask_user_for_guess
+    @last_guessed_letter = @user_guess.user_prompt
+
+  end
+
+  def add_letter_to_guess_array
+    @guessed_letters << @last_guessed_letter
+    @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
   end
 
   def update_remaining_guesses #need to test - writing test below
@@ -41,7 +56,7 @@ class GuessingGame
 
 end
 
-class LetterGuess
+class GuessPrompter
 
   attr_reader :guessed_letters, :add_letter_to_guess_array, :guess
 
@@ -49,22 +64,15 @@ class LetterGuess
     @guessed_letters = []
   end
 
-  def guess_letter
+  def user_prompt
     print "What letter would you like to guess? > "
     @guess = gets.chomp.downcase
   end
 
-  def add_letter_to_guess_array
-    @guessed_letters << @guess
-    @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
-  end
-
-
-
 end
 
 #include bank of words, get_word method that will choose a word and puts the word in stars, remove word from bank
-class WordBank
+class WordFetcher
   attr_accessor :answer_array, :answer
 
   def initialize
@@ -82,4 +90,10 @@ class WordBank
 
   end
 
+end
+
+puts "Checking if this works"
+
+@play = GamePlay.new
+10.times do @play.play_game
 end

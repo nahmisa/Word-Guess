@@ -41,6 +41,7 @@ class GamePlay
   end
 
   def ask_user_for_guess
+
     @last_guessed_letter = @user_guess.user_prompt
 
   end
@@ -67,15 +68,23 @@ end
 
 class GuessPrompter
 
-  attr_reader :guessed_letters, :add_letter_to_guess_array, :guess
+  attr_reader :guessed_letters, :add_letter_to_guess_array, :guess, :possible_letters
 
   def initialize
     @guessed_letters = []
   end
 
   def user_prompt
+    @possible_letters = ('a'..'z').to_a
     print "\nWhat letter would you like to guess? > "
-    @guess = gets.chomp.downcase
+    while @guess = gets.chomp.downcase
+      if !(@possible_letters.include? @guess) || !(@guess.length == 1)
+        print "Sorry, that is not a valid guess. Please enter a letter.  > "
+      else
+        return @guess
+        break
+      end
+    end
   end
 
 end

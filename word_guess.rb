@@ -28,7 +28,7 @@ class GamePlay
 
   def win? #my collarborator was a match teacher and she undertands intersections!
     if @answer_validation_array & @guessed_letters ==  @answer_validation_array
-      puts "You managed to keep the dinosaur at bay and correctly guessed the word, #{ @answer_validation_array.join("") }." #not-match teacherese: when the guessed letter array includes all the letters in the answer array, the "intersection" will be the answer array.
+      puts "You managed to keep the dinosaur at bay and correctly guessed the word, '#{ @answer_validation_array.join("") }'." #not-match teacherese: when the guessed letter array includes all the letters in the answer array, the "intersection" will be the answer array.
       puts "You win!"
       return true
     else
@@ -38,7 +38,7 @@ class GamePlay
 
   def lose?
     if @number_of_guesses == 0
-      puts "The dinosaur chomps you before you are able to guess the word, #{ @answer_validation_array.join("") }."
+      puts "The dinosaur chomps you before you are able to guess the word, '#{ @answer_validation_array.join("") }'."
       puts "You were eaten :("
       return true
     else
@@ -160,54 +160,102 @@ end
                             \______/
 DINOSAUR
 
-@car10_9 = <<'TEN'
-                                                                                   oh my!
-                                                                            _____ /
-                                                                           |  O O|
-                                                                          /___|_|/\_
-                                                                     ==( |          |
-                                                                          (o)====(o)
+
+@car10 = <<'TEN'
+                                                                                                     oh my!
+                                                                                              _____ /
+                                                                                             |  O O|
+                                                                                            /___|_|/\_
+                                                                                 =========(|          |
+                                                                                            (o)====(o)
 TEN
-@car8_7 = <<"EIGHT"
-                                                                         egads!
-                                                                  _____ /
-                                                                 |  O O|
-                                                                /___|_|/\_
-                                                           ==( |          |
-                                                                (o)====(o)
+@car9 = <<'NINE'
+                                                                                           egads!
+                                                                                    _____ /
+                                                                                   |  O O|
+                                                                                  /___|_|/\_
+                                                                        ========(|          |
+                                                                                  (o)====(o)
+NINE
+@car8 = <<"EIGHT"
+                                                                                     zoinks!
+                                                                              _____ /
+                                                                             |  O O|
+                                                                            /___|_|/\_
+                                                                   =======(|          |
+                                                                            (o)====(o)
 EIGHT
-@car6_5 = <<"SIX"
-                                                                 zoinks!
-                                                          _____ /
-                                                         |  O O|
-                                                        /___|_|/\_
-                                                   ==( |          |
-                                                        (o)====(o)
+@car7 = <<"SEVEN"
+                                                                             elephant hotdog!
+                                                                      _____ /
+                                                                     |  O O|
+                                                                    /___|_|/\_
+                                                           =======(|          |
+                                                                    (o)====(o)
+SEVEN
+@car6 = <<"SIX"
+                                                                       sweet syntactic sugar!
+                                                                _____ /
+                                                               |  O O|
+                                                              /___|_|/\_
+                                                       =====(|          |
+                                                              (o)====(o)
 SIX
-@car4_3 = <<"FOUR"
-                                                         elephant hotdog!
+@car5 = <<"FIVE"
+                                                             infinite loop!
+                                                      _____ /
+                                                     |  O O|
+                                                    /___|_|/\_
+                                           =======(|          |
+                                                    (o)====(o)
+FIVE
+@car4 = <<"FOUR"
+                                                         oh fudge!
                                                   _____ /
                                                  |  O O|
                                                 /___|_|/\_
-                                           ==( |          |
+                                         =====(|          |
                                                 (o)====(o)
 FOUR
+@car3 = <<"THREE"
+                                                     oh my stars!
+                                              _____ /
+                                             |  O O|
+                                            /___|_|/\_
+                                   =======(|          |
+                                            (o)====(o)
+THREE
 @car2 = <<"TWO"
-                                                 oh bugger!
-                                          _____ /
-                                         |  O O|
-                                        /___|_|/\_
-                                   ==( |          |
-                                        (o)====(o)
+                                             goodbye cruel world!
+                                      _____ /
+                                     |  O O|
+                                    /___|_|/\_
+                              ====(|          |
+                                    (o)====(o)
 TWO
 @car1 = <<"ONE"
                                        poop!
                                 _____ /
                                |  O O|
                               /___|_|/\_
-                         ==( |          |
+                         ===(|         |
                               (o)====(o)
 ONE
+@dino_wins= <<'YAY'
+         __
+        /oo\
+       |    |
+   ^^  (vvvv)   ^^
+   \\  /\__/\  //
+    \\/      \//
+     /        \
+    |          |    ^
+    /          \___/ |
+   (            )    |
+    \----------/     /
+       //    \\_____/
+      W       W
+YAY
 
 
 intro = "Let's play a word guessing game!!!!"
@@ -217,24 +265,38 @@ puts intro
 while @play.number_of_guesses >= 0  #we need to enter the loop even on == 0 to let user know they've lost
 #use cases to move the car closer to the dino as guesses left decreases.
   case @play.number_of_guesses
-    when 10, 9
+    when 10
       print @dino.colorize(:green)
-      print @car10_9
-    when 8, 7
+      print @car10
+    when 9
+      print @dino.colorize(:light_green)
+      print @car9
+    when 8
       print @dino.colorize(:blue)
-      print @car8_7
-    when 6, 5
-      print @dino.colorize(:yellow)
-      print @car6_5
-    when 4, 3
-      print @dino.colorize(:orange)
-      print @car4_3
+      print @car8
+    when 7
+      print @dino.colorize(:light_blue)
+      print @car7
+    when 6
+      print @dino.colorize(:cyan)
+      print @car6
+    when 5
+      print @dino.colorize(:light_cyan)
+      print @car5
+    when 4
+      print @dino.colorize(:white)
+      print @car4
+    when 3
+      print @dino.colorize(:light_magenta)
+      print @car3
     when 2
-      print @dino.colorize(:maroon)
+      print @dino.colorize(:magenta)
       print @car2
     when 1
       print @dino.colorize(:red)
       print @car1
+    when 0
+      print @dino_wins.blink
   end
   @play.play_game
 

@@ -1,3 +1,4 @@
+require "colorize"
 class GamePlay
   attr_reader :number_of_guesses
   def initialize
@@ -22,13 +23,11 @@ class GamePlay
     ask_user_for_guess
     add_letter_to_guess_array
     update_remaining_guesses
-
-
-
-
   end
 
   def print_answer_blanks
+    puts "==================================================================\n"
+    print "                            "
     @answer_validation_array.each do |letter|
       if @guessed_letters.include? letter
         print " #{letter} "
@@ -36,12 +35,14 @@ class GamePlay
         print " * "
       end
     end
+    puts "\n==================================================================\n"
+
 
   end
 
   def display_guessed_letters
     if !(@guessed_letters.empty?)
-      print "\nYou have already guessed "
+      print "\nRemember that you have already used "
       print "#{@guessed_letters}"
       print "."
     end
@@ -140,8 +141,112 @@ class WordFetcher
 
 end
 
+@dino = <<'SOME_SEQUENCE_THAT_DOES_NOT_APPEAR_IN_THE_ASCII_ART'
+          ,
+         /|
+        / |
+      /  /
+     |   |
+    /    |
+    |    \_
+    |      \__
+    \       __\_______
+    \                 \_
+    | /                 \
+    \/                   \
+    |                    |
+    \                   \|
+    |                    \
+    \                     |
+    /\    \_               \
+    / |      \__ (   )       \
+  /  \      / |\\  /       __\____
+  |  ,     |  /\ \ \__    |       \_
+  \_/|\___/   \   \}}}\__|  (@)     )
+   \)\)\)      \_\---\   \|       \ \
+                \>\>\>   \   /\__o_o)
+                          | /  VVVVV
+                          \ \    \
+                           \ \MMMMM
+                            \______/
+SOME_SEQUENCE_THAT_DOES_NOT_APPEAR_IN_THE_ASCII_ART
 
+@car10_9 = <<'TEN'
+                                                                                   oh my!
+                                                                            _____ /
+                                                                           |  O O|
+                                                                          /___|_|/\_
+                                                                     ==( |          |
+                                                                          (o)====(o)
+TEN
+@car8_7 = <<"EIGHT"
+                                                                         egads!
+                                                                  _____ /
+                                                                 |  O O|
+                                                                /___|_|/\_
+                                                           ==( |          |
+                                                                (o)====(o)
+EIGHT
+@car6_5 = <<"SIX"
+                                                                 zoinks!
+                                                          _____ /
+                                                         |  O O|
+                                                        /___|_|/\_
+                                                   ==( |          |
+                                                        (o)====(o)
+SIX
+@car4_3 = <<"FOUR"
+                                                         elephant hotdog!
+                                                  _____ /
+                                                 |  O O|
+                                                /___|_|/\_
+                                           ==( |          |
+                                                (o)====(o)
+FOUR
+@car2 = <<"TWO"
+                                                 oh bugger!
+                                          _____ /
+                                         |  O O|
+                                        /___|_|/\_
+                                   ==( |          |
+                                        (o)====(o)
+TWO
+@car1 = <<"ONE"
+                                       poop!
+                                _____ /
+                               |  O O|
+                              /___|_|/\_
+                         ==( |          |
+                              (o)====(o)
+ONE
+
+
+intro = "Let's play a word guessing game!!!!"
+
+puts intro
 @play = GamePlay.new
-while @play.number_of_guesses >= 0
+while @play.number_of_guesses >= 0  #we need to enter the loop on tries = 0 loop to let user know they've lost
+  case @play.number_of_guesses
+  when 10 ,9
+      print @dino.colorize(:green)
+      print @car10_9
+  when 8 ,7
+      print @dino.colorize(:blue)
+      print @car8_7
+    when 6 ,5
+      print @dino.colorize(:yellow)
+      print @car6_5
+    when 4 ,3
+      print @dino.colorize(:orange)
+      print @car4_3
+    when 2
+      print @dino.colorize(:maroon)
+      print @car2
+    when 1
+      print @dino.colorize(:red)
+      print @car1
+
+  end
   @play.play_game
+
 end

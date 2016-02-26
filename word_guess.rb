@@ -1,5 +1,5 @@
 class GamePlay
-  attr_accessor :answer_word, :answer_validation_array, :user_guess, :last_guessed_letter, :guessed_letters
+  attr_reader :number_of_guesses
   def initialize
     @number_of_guesses = 10
     @answer_word = WordFetcher.new
@@ -8,16 +8,24 @@ class GamePlay
     @guessed_letters = []
   end
 
-#print guessed_letters when not nil to show user what they have guessed
-#compare guessed_letters to answer array to print stars
-#compare GuessPrompter. user_prompt to WordFetcher.answer_array to see if correct or incorrect
-
   def play_game
+    if win?
+      exit
+    end
+
+    if lose?
+      exit
+    end
+
     print_answer_blanks
     display_guessed_letters
     ask_user_for_guess
     add_letter_to_guess_array
     update_remaining_guesses
+
+
+
+
   end
 
   def print_answer_blanks
@@ -51,7 +59,6 @@ class GamePlay
     @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
   end
 
-
   def update_remaining_guesses #need to test - writing test below
     if !(@answer_validation_array.include? @last_guessed_letter) #if the guess is not in the answer array, the user losses a guess.
       @number_of_guesses -= 1
@@ -64,11 +71,30 @@ class GamePlay
 
   end
 
+  def win? #my collarborator was a match teacher and she undertands intersections!
+    if @answer_validation_array & @guessed_letters ==  @answer_validation_array
+      puts "You managed to keep the dinosaur at bay and correctly guessed the word, #{ @answer_validation_array.join("") }."
+      puts "You win!"
+      return true
+    else
+      return false
+    end
+  end
+
+  def lose?
+    if @number_of_guesses == 0
+      puts "The dinosaur chomps you before you are able to guess the word, #{ @answer_validation_array.join("") }."
+      puts "You were eaten :("
+      return true
+    else
+      return false
+    end
+
+  end
+
 end
 
 class GuessPrompter
-
-  attr_reader :guessed_letters, :add_letter_to_guess_array, :guess, :possible_letters
 
   def initialize
     @guessed_letters = []
@@ -96,7 +122,6 @@ end
 
 #include bank of words, get_word method that will choose a word and puts the word in stars, remove word from bank
 class WordFetcher
-  attr_accessor :answer_array, :answer
 
   def initialize
     @words = %w(cat dog hello there pie mug hat fox door bear frog mice)
@@ -115,8 +140,8 @@ class WordFetcher
 
 end
 
-puts "Checking if this works"
 
 @play = GamePlay.new
-10.times do @play.play_game
+while @play.number_of_guesses >= 0
+  @play.play_game
 end

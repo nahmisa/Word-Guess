@@ -14,11 +14,10 @@ class GamePlay
 
   def play_game
     print_answer_blanks
+    display_guessed_letters
     ask_user_for_guess
     add_letter_to_guess_array
     update_remaining_guesses
-
-
   end
 
   def print_answer_blanks
@@ -32,6 +31,15 @@ class GamePlay
 
   end
 
+  def display_guessed_letters
+    if !(@guessed_letters.empty?)
+      print "\nYou have already guessed "
+      print "#{@guessed_letters}"
+      print "."
+    end
+
+  end
+
   def ask_user_for_guess
     @last_guessed_letter = @user_guess.user_prompt
 
@@ -41,6 +49,7 @@ class GamePlay
     @guessed_letters << @last_guessed_letter
     @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
   end
+
 
   def update_remaining_guesses #need to test - writing test below
     if !(@answer_validation_array.include? @last_guessed_letter) #if the guess is not in the answer array, the user losses a guess.
@@ -65,7 +74,7 @@ class GuessPrompter
   end
 
   def user_prompt
-    print "What letter would you like to guess? > "
+    print "\nWhat letter would you like to guess? > "
     @guess = gets.chomp.downcase
   end
 

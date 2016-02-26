@@ -1,15 +1,17 @@
 class GuessingGame
   attr_accessor :wordbank_answer, :answer_validation_array, :user_guess
   def initialize
+    @number_of_guesses = 10
     @wordbank_answer = WordBank.new
     @answer_validation_array = @wordbank_answer.get_word
-    @user_guess = WordGuess.new
+    @user_guess = LetterGuess.new
+    @last_guessed_letter = @user_guess.guess
     @guessed_letters_validation_array = @user_guess.guessed_letters
   end
 
 #print guessed_letters when not nil to show user what they have guessed
 #compare guessed_letters to answer array to print stars
-#compare WordGuess.letter_guess to WordBank.answer_array to see if correct or incorrect
+#compare LetterGuess. guess_letter to WordBank.answer_array to see if correct or incorrect
   def print_answer_blanks
     @answer_validation_array.each do |letter|
       if @guessed_letters_validation_array.include? letter
@@ -21,20 +23,26 @@ class GuessingGame
 
   end
 
+  def update_remaining_guesses
+    if !(@answer_validation_array.include? @last_guessed_letter) #if the guess is not in the answer array, the user losses a guess.
+      @number_of_guesses -= 1
+    end
+  end
+
 end
 
-class WordGuess
+class LetterGuess
 
-  attr_reader :guessed_letters
+  attr_reader :guessed_letters, :guess
 
   def initialize
     @guessed_letters = []
   end
 
-  def letter_guess
+  def guess_letter
     print "What letter would you like to guess? > "
-    guess = gets.chomp.downcase
-    @guessed_letters << guess
+    @guess = gets.chomp.downcase
+    @guessed_letters << @guess
     @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
 
   end

@@ -1,6 +1,7 @@
 require "colorize"
 class GamePlay
-  attr_reader :number_of_guesses
+  attr_reader :number_of_guesses #our output needs to read this for the loop
+
   def initialize
     @number_of_guesses = 10
     @answer_word = WordFetcher.new
@@ -25,9 +26,29 @@ class GamePlay
     update_remaining_guesses
   end
 
+  def win? #my collarborator was a match teacher and she undertands intersections!
+    if @answer_validation_array & @guessed_letters ==  @answer_validation_array
+      puts "You managed to keep the dinosaur at bay and correctly guessed the word, #{ @answer_validation_array.join("") }." #not-match teacherese: when the guessed letter array includes all the letters in the answer array, the "intersection" will be the answer array.
+      puts "You win!"
+      return true
+    else
+      return false
+    end
+  end
+
+  def lose?
+    if @number_of_guesses == 0
+      puts "The dinosaur chomps you before you are able to guess the word, #{ @answer_validation_array.join("") }."
+      puts "You were eaten :("
+      return true
+    else
+      return false
+    end
+  end
+
   def print_answer_blanks
     puts "==================================================================\n"
-    print "                            "
+    print "                            " #to move the word blanks away from left justified
     @answer_validation_array.each do |letter|
       if @guessed_letters.include? letter
         print " #{letter} "
@@ -36,8 +57,6 @@ class GamePlay
       end
     end
     puts "\n==================================================================\n"
-
-
   end
 
   def display_guessed_letters
@@ -46,13 +65,10 @@ class GamePlay
       print "#{@guessed_letters}"
       print "."
     end
-
   end
 
   def ask_user_for_guess
-
     @last_guessed_letter = @user_guess.user_prompt
-
   end
 
   def add_letter_to_guess_array
@@ -69,29 +85,8 @@ class GamePlay
       puts "Yipee!!! '#{ @last_guessed_letter }' was in the word."
       puts "The dinosaur is still #{ @number_of_guesses } feet away."
     end
-
   end
 
-  def win? #my collarborator was a match teacher and she undertands intersections!
-    if @answer_validation_array & @guessed_letters ==  @answer_validation_array
-      puts "You managed to keep the dinosaur at bay and correctly guessed the word, #{ @answer_validation_array.join("") }."
-      puts "You win!"
-      return true
-    else
-      return false
-    end
-  end
-
-  def lose?
-    if @number_of_guesses == 0
-      puts "The dinosaur chomps you before you are able to guess the word, #{ @answer_validation_array.join("") }."
-      puts "You were eaten :("
-      return true
-    else
-      return false
-    end
-
-  end
 
 end
 
@@ -104,6 +99,7 @@ class GuessPrompter
   def user_prompt
     @possible_letters = ('a'..'z').to_a
     print "\nWhat letter would you like to guess? > "
+    #this loop validates that the user input is a SINGLE LETTER.  If it is a single letter, the second if statement checks that the user has not alreay guessed that letter by seeing what's included in the guessed_letters array.
     while @guess = gets.chomp.downcase
       if !(@possible_letters.include? @guess) || !(@guess.length == 1) # first we need to get a letter
         print "Sorry, that is not a valid guess. Please enter a letter.  > "
@@ -121,7 +117,7 @@ class GuessPrompter
 
 end
 
-#include bank of words, get_word method that will choose a word and puts the word in stars, remove word from bank
+#include bank of words, get_word method that will choose a word
 class WordFetcher
 
   def initialize
@@ -130,18 +126,11 @@ class WordFetcher
 
   def get_word
     @answer = @words.sample
-    @words.delete(@answer)
-
     @answer_array = @answer.split(//)
-
-
-    #we will need to make this word into an array so that we can replace stars with correct letter guesses
-
   end
-
 end
 
-@dino = <<'SOME_SEQUENCE_THAT_DOES_NOT_APPEAR_IN_THE_ASCII_ART'
+@dino = <<'DINOSAUR'
           ,
          /|
         / |
@@ -169,7 +158,7 @@ end
                           \ \    \
                            \ \MMMMM
                             \______/
-SOME_SEQUENCE_THAT_DOES_NOT_APPEAR_IN_THE_ASCII_ART
+DINOSAUR
 
 @car10_9 = <<'TEN'
                                                                                    oh my!
@@ -225,18 +214,19 @@ intro = "Let's play a word guessing game!!!!"
 
 puts intro
 @play = GamePlay.new
-while @play.number_of_guesses >= 0  #we need to enter the loop on tries = 0 loop to let user know they've lost
+while @play.number_of_guesses >= 0  #we need to enter the loop even on == 0 to let user know they've lost
+#use cases to move the car closer to the dino as guesses left decreases.
   case @play.number_of_guesses
-  when 10 ,9
+    when 10, 9
       print @dino.colorize(:green)
       print @car10_9
-  when 8 ,7
+    when 8, 7
       print @dino.colorize(:blue)
       print @car8_7
-    when 6 ,5
+    when 6, 5
       print @dino.colorize(:yellow)
       print @car6_5
-    when 4 ,3
+    when 4, 3
       print @dino.colorize(:orange)
       print @car4_3
     when 2
@@ -245,7 +235,6 @@ while @play.number_of_guesses >= 0  #we need to enter the loop on tries = 0 loop
     when 1
       print @dino.colorize(:red)
       print @car1
-
   end
   @play.play_game
 

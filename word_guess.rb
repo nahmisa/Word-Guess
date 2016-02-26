@@ -5,14 +5,14 @@ class GuessingGame
     @wordbank_answer = WordBank.new
     @answer_validation_array = @wordbank_answer.get_word
     @user_guess = LetterGuess.new
-    @last_guessed_letter = @user_guess.guess
     @guessed_letters_validation_array = @user_guess.guessed_letters
   end
 
 #print guessed_letters when not nil to show user what they have guessed
 #compare guessed_letters to answer array to print stars
 #compare LetterGuess. guess_letter to WordBank.answer_array to see if correct or incorrect
-  def method_name
+  def ask_user_for_guess
+    @last_guessed_letter = @user_guess.guess_letter
 
   end
 
@@ -30,10 +30,10 @@ class GuessingGame
   def update_remaining_guesses #need to test - writing test below
     if !(@answer_validation_array.include? @last_guessed_letter) #if the guess is not in the answer array, the user losses a guess.
       @number_of_guesses -= 1
-      puts "Oh no!  There was no #{ @last_guessed_letter } in the word."
+      puts "Oh no!  There was no '#{ @last_guessed_letter }' in the word."
       puts "The dinosaur is now #{ @number_of_guesses } feet away from you!!!!"
     else
-      puts "Yipee!!! #{ @last_guessed_letter } was in the word."
+      puts "Yipee!!! '#{ @last_guessed_letter }' was in the word."
       puts "The dinosaur is still #{ @number_of_guesses } feet away."
     end
 
@@ -43,7 +43,7 @@ end
 
 class LetterGuess
 
-  attr_reader :guessed_letters, :guess
+  attr_reader :guessed_letters, :add_letter_to_guess_array, :guess
 
   def initialize
     @guessed_letters = []
@@ -52,9 +52,11 @@ class LetterGuess
   def guess_letter
     print "What letter would you like to guess? > "
     @guess = gets.chomp.downcase
+  end
+
+  def add_letter_to_guess_array
     @guessed_letters << @guess
     @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
-
   end
 
 

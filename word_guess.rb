@@ -27,7 +27,7 @@ class GamePlay
   end
 
   def win? #my collarborator was a match teacher and she undertands intersections!
-    if @answer_validation_array & @guessed_letters ==  @answer_validation_array
+    if @answer_validation_array & @guessed_letters ==  @answer_validation_array.uniq # must use uniq beacause intersection won't return duplicate letters. Otherwise can never win the game!(with words that have duplicate letters)
       puts "You managed to keep the dinosaur at bay and correctly guessed the word, '#{ @answer_validation_array.join("") }'." #not-match teacherese: when the guessed letter array includes all the letters in the answer array, the "intersection" will be the answer array.
       puts "You win!"
       return true

@@ -7,11 +7,11 @@ class GamePlay
     @answer_word = WordFetcher.new
     @answer_validation_array = @answer_word.get_word
     @user_guess = GuessPrompter.new
-    @guessed_letters = []
+    @guessed_things = []
   end
 
   def play_game
-    if win?(@guessed_letters)
+    if win?(@guessed_things)
       exit
     end
 
@@ -24,7 +24,7 @@ class GamePlay
     ask_user_for_guess
 
     if guessed_word?
-      if win?(@last_guessed_letter_array)
+      if win?(@last_guess_array)
         exit
       end
     end
@@ -58,7 +58,7 @@ class GamePlay
     puts "==================================================================\n"
     print "                            " #to move the word blanks away from left justified
     @answer_validation_array.each do |letter|
-      if @guessed_letters.include? letter
+      if @guessed_things.include? letter
         print " #{letter} "
       else
         print " * "
@@ -68,37 +68,37 @@ class GamePlay
   end
 
   def display_guessed_letters
-    if !(@guessed_letters.empty?)
-      print "\nRemember that you have already used "
-      print "#{@guessed_letters}"
+    if !(@guessed_things.empty?)
+      print "\nRemember that you have already guessed "
+      print "#{@guessed_things}"
       print "."
     end
   end
 
   def ask_user_for_guess
-    @last_guessed_letter = @user_guess.user_prompt
-    if @last_guessed_letter.length > 1
-      @last_guessed_letter_array = @last_guessed_letter.split(//)
+    @last_guess = @user_guess.user_prompt
+    if @last_guess.length > 1
+      @last_guess_array = @last_guess.split(//)
     end
   end
 
   def guessed_word?
-    @last_guessed_letter.length > 1
+    @last_guess.length > 1
 
   end
 
   def add_letter_to_guess_array
-    @guessed_letters << @last_guessed_letter
-    @guessed_letters.sort! #because we will display guessed letters in a reasonable fashion
+    @guessed_things << @last_guess
+    @guessed_things.sort! #because we will display guessed letters in a reasonable fashion
   end
 
   def update_remaining_guesses #need to test - writing test below
-    if !(@answer_validation_array.include? @last_guessed_letter) #if the guess is not in the answer array, the user losses a guess.
+    if !(@answer_validation_array.include? @last_guess) #if the guess is not in the answer array, the user losses a guess.
       @number_of_guesses -= 1
-      puts "Oh no!  There was no '#{ @last_guessed_letter }' in the word."
+      puts "Oh no!  There was no '#{ @last_guess }' in the word."
       puts "The dinosaur is now #{ @number_of_guesses } feet away from you!!!!"
     else
-      puts "Yipee!!! '#{ @last_guessed_letter }' was in the word."
+      puts "Yipee!!! '#{ @last_guess }' was in the word."
       puts "The dinosaur is still #{ @number_of_guesses } feet away."
     end
   end
@@ -109,7 +109,7 @@ end
 class GuessPrompter
 
   def initialize
-    @guessed_letters = []
+    @guessed_things = []
   end
 
   def user_prompt
@@ -125,10 +125,10 @@ class GuessPrompter
       elsif !(@possible_letters.include? @guess) || !(@guess.length == 1) # first we need to get a letter
         print "Sorry, that is not a valid guess. Please enter a letter.  > "
       else
-        if @guessed_letters.include? @guess #guessed letters IS part of the array already
+        if @guessed_things.include? @guess #guessed letters IS part of the array already
           print "You've already guessed that letter!  Please enter a new letter. > "
         else
-          @guessed_letters << @guess #push the guess into the array for future comparisons
+          @guessed_things << @guess #push the guess into the array for future comparisons
           return @guess
           break
         end
@@ -143,7 +143,7 @@ class WordFetcher
 
   def initialize
     @words = %w(cat dog hello there pie mug hat fox door bear frog mice)
-    
+
   end
 
   def get_word

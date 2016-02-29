@@ -11,7 +11,7 @@ class GamePlay
   end
 
   def play_game
-    if win?
+    if win?(@guessed_letters)
       exit
     end
 
@@ -22,12 +22,20 @@ class GamePlay
     print_answer_blanks
     display_guessed_letters
     ask_user_for_guess
-    add_letter_to_guess_array
-    update_remaining_guesses
+
+    if guessed_word?
+      if win?(@last_guessed_letter_array)
+        exit
+      end
+    end
+
+      add_letter_to_guess_array
+      update_remaining_guesses
+
   end
 
-  def win? #my collarborator was a match teacher and she undertands intersections!
-    if @answer_validation_array & @guessed_letters ==  @answer_validation_array.uniq # must use uniq beacause intersection won't return duplicate letters. Otherwise can never win the game!(with words that have duplicate letters)
+  def win?(array) #my collarborator was a match teacher and she undertands intersections!
+    if @answer_validation_array & array ==  @answer_validation_array.uniq # must use uniq beacause intersection won't return duplicate letters. Otherwise can never win the game!(with words that have duplicate letters)
       puts "You managed to keep the dinosaur at bay and correctly guessed the word, '#{ @answer_validation_array.join("") }'." #not-match teacherese: when the guessed letter array includes all the letters in the answer array, the "intersection" will be the answer array.
       puts "You win!"
       return true
@@ -69,6 +77,14 @@ class GamePlay
 
   def ask_user_for_guess
     @last_guessed_letter = @user_guess.user_prompt
+    if @last_guessed_letter.length > 1
+      @last_guessed_letter_array = @last_guessed_letter.split(//)
+    end
+  end
+
+  def guessed_word?
+    @last_guessed_letter.length > 1
+
   end
 
   def add_letter_to_guess_array
@@ -98,10 +114,15 @@ class GuessPrompter
 
   def user_prompt
     @possible_letters = ('a'..'z').to_a
-    print "\nWhat letter would you like to guess? > "
+    print "\nWhat letter would you like to guess? Type '*' if you would like to guess the whole word. > "
     #this loop validates that the user input is a SINGLE LETTER.  If it is a single letter, the second if statement checks that the user has not alreay guessed that letter by seeing what's included in the guessed_letters array.
     while @guess = gets.chomp.downcase
-      if !(@possible_letters.include? @guess) || !(@guess.length == 1) # first we need to get a letter
+      if @guess == "*"
+       print  "What is the word? > "
+        return @whole_word_guess = gets.chomp
+        break
+
+      elsif !(@possible_letters.include? @guess) || !(@guess.length == 1) # first we need to get a letter
         print "Sorry, that is not a valid guess. Please enter a letter.  > "
       else
         if @guessed_letters.include? @guess #guessed letters IS part of the array already
@@ -122,6 +143,7 @@ class WordFetcher
 
   def initialize
     @words = %w(cat dog hello there pie mug hat fox door bear frog mice)
+    
   end
 
   def get_word
@@ -296,7 +318,7 @@ while @play.number_of_guesses >= 0  #we need to enter the loop even on == 0 to l
       print @dino.colorize(:red)
       print @car1
     when 0
-      print @dino_wins.blink
+      print @dino_wins.colorize(:red).blink
   end
   @play.play_game
 

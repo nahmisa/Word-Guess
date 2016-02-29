@@ -29,7 +29,7 @@ class GamePlay
       end
     end
 
-      add_letter_to_guess_array
+      add_to_guess_array
       update_remaining_guesses
 
   end
@@ -87,7 +87,7 @@ class GamePlay
 
   end
 
-  def add_letter_to_guess_array
+  def add_to_guess_array
     @guessed_things << @last_guess
     @guessed_things.sort! #because we will display guessed letters in a reasonable fashion
   end
